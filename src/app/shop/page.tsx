@@ -1,35 +1,38 @@
+"use client";
+
+import { useCart } from "@/context/CartContext";
+
 const products = [
-  { id: 1, name: "Elegant Necklace", price: 1200, image: "/necklace.jpg" },
-  { id: 2, name: "Silver Earrings", price: 800, image: "/earrings.jpg" },
-  { id: 3, name: "Golden Bracelet", price: 1500, image: "/bracelet.jpg" },
-  { id: 4, name: "Diamond Ring", price: 2500, image: "/ring.jpg" },
+  { id: 1, name: "Necklace", price: 1500, image: "images/product1.jpg" },
+  { id: 2, name: "Earrings", price: 800, image: "images/product2.jpg" },
+  { id: 3, name: "Bracelet", price: 1200, image: "images/product3.jpg" },
+  { id: 4, name: "Ring", price: 600, image: "images/product4.jpg" },
 ];
 
 export default function ShopPage() {
+  const { addToCart } = useCart();
+
   return (
-    <section className="py-12 container mx-auto px-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Our Collection</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <div className="max-w-7xl mx-auto px-6 py-12">
+      <h1 className="text-3xl font-bold text-pink-700 mb-8 text-center">Shop</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {products.map((product) => (
           <div
             key={product.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition"
+            className="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition"
           >
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4 text-center">
-              <h2 className="text-lg font-semibold">{product.name}</h2>
-              <p className="text-gray-600 mt-2">₹{product.price}</p>
-              <button className="mt-4 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700">
-                Add to Cart
-              </button>
-            </div>
+            <img src={product.image} alt={product.name} className="rounded-lg mb-4" />
+            <h3 className="font-semibold">{product.name}</h3>
+            <p className="text-gray-500">₹{product.price}</p>
+            <button
+              onClick={() => addToCart({ ...product, quantity: 1 })}
+              className="mt-3 w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition"
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

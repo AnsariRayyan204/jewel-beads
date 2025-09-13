@@ -1,100 +1,102 @@
 "use client";
 
-import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { useState } from "react";
 
 export default function CheckoutPage() {
   const { cart } = useCart();
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     address: "",
-    phone: "",
   });
 
-  const total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Order placed successfully!\n\nName: ${formData.name}\nEmail: ${formData.email}\nTotal: ₹${total}`);
+
+    // 📝 Normally: send order to backend or payment gateway
+    alert(`✅ Order placed!\nName: ${form.name}\nTotal: ₹${cartTotal}`);
   };
 
   return (
-    <main className="min-h-screen bg-black text-white py-12 px-6">
-      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
-        {/* Checkout Form */}
-        <div>
-          <h1 className="text-2xl font-bold mb-6">Checkout</h1>
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-center text-pink-700">
+        Checkout
+      </h1>
+
+      {cart.length === 0 ? (
+        <p className="text-center text-gray-500">Your cart is empty.</p>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-md rounded-xl p-6 space-y-6"
+        >
+          {/* User Info */}
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Name</label>
             <input
               type="text"
               name="name"
-              placeholder="Full Name"
-              value={formData.name}
+              value={form.name}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg text-black"
+              className="w-full border rounded-lg p-2"
             />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Email</label>
             <input
               type="email"
               name="email"
-              placeholder="Email Address"
-              value={formData.email}
+              value={form.email}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg text-black"
+              className="w-full border rounded-lg p-2"
             />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">Address</label>
             <textarea
               name="address"
-              placeholder="Shipping Address"
-              value={formData.address}
+              value={form.address}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg text-black"
               rows={3}
+              className="w-full border rounded-lg p-2"
             />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="w-full p-3 rounded-lg text-black"
-            />
-            <button
-              type="submit"
-              className="w-full bg-white text-black py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
-            >
-              Place Order
-            </button>
-          </form>
-        </div>
+          </div>
 
-        {/* Cart Summary */}
-        <div>
-          <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
-          {cart.length === 0 ? (
-            <p className="text-gray-400">Your cart is empty.</p>
-          ) : (
-            <div className="space-y-4">
-              {cart.map((item) => (
-                <div key={item.id} className="flex justify-between text-gray-300">
-                  <span>{item.name} {item.quantity ? `x${item.quantity}` : ""}</span>
-                  <span>₹{item.price * (item.quantity || 1)}</span>
-                </div>
-              ))}
-              <hr className="border-gray-700" />
-              <p className="text-lg font-semibold">Total: ₹{total}</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </main>
+          {/* Order Summary */}
+          <div className="bg-pink-50 p-4 rounded-lg">
+            <h2 className="text-xl font-semibold mb-2">Order Summary</h2>
+            {cart.map((item) => (
+              <p key={item.id} className="text-gray-700">
+                {item.name} x {item.quantity} = ₹{item.price * item.quantity}
+              </p>
+            ))}
+            <h3 className="font-bold mt-3">Total: ₹{cartTotal}</h3>
+          </div>
+
+          {/* Place Order */}
+          <button
+            type="submit"
+            className="w-full bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 transition"
+          >
+            Place Order
+          </button>
+        </form>
+      )}
+    </div>
   );
 }

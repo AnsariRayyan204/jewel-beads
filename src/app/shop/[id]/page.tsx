@@ -1,4 +1,7 @@
-import ProductCard from "@/app/components/ProductCard";
+"use client";
+
+import { use } from "react"; // ✅ needed for unwrapping params
+import { useCart } from "@/context/CartContext";
 
 const products = [
   { id: 1, name: "Gold Necklace", price: 120, image: "/images/necklace.jpg", description: "Elegant gold necklace perfect for special occasions." },
@@ -6,8 +9,13 @@ const products = [
   { id: 3, name: "Diamond Earrings", price: 250, image: "/images/earrings.jpg", description: "Sparkling diamond earrings that shine in every ugly ear." },
 ];
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = products.find((p) => p.id === Number(params.id));
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { addToCart } = useCart();
+
+  // ✅ unwrap params with React.use()
+  const { id } = use(params);
+
+  const product = products.find((p) => p.id === Number(id));
 
   if (!product) {
     return <p className="text-center text-gray-400 mt-20">Product not found.</p>;
@@ -27,7 +35,10 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           <p className="text-xl text-gray-300 mb-4">₹{product.price}</p>
           <p className="text-gray-400 mb-6">{product.description}</p>
 
-          <button className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition">
+          <button
+            onClick={() => addToCart({ ...product, quantity: 1 })}
+            className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition"
+          >
             Add to Cart
           </button>
         </div>
