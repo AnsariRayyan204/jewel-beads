@@ -1,5 +1,5 @@
 "use client";
-import { ShoppingCart, User, Search } from "lucide-react";
+import { ShoppingCart, User, Search, Heart } from "lucide-react";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -13,15 +13,31 @@ export default function Navbar() {
         </Link>
 
         {/* Right side icons */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6 relative">
+          {/* Search */}
           <button aria-label="Search">
             <Search className="w-6 h-6 hover:text-pink-600 transition" />
           </button>
+
+          {/* Account */}
           <Link href="/auth/login" aria-label="Account">
             <User className="w-6 h-6 hover:text-pink-600 transition" />
           </Link>
-          <Link href="/cart" aria-label="Cart">
+
+          {/* Wishlist */}
+          <Link href="/wishlist" className="relative" aria-label="Wishlist">
+            <Heart className="w-6 h-6 hover:text-pink-600 transition" />
+            <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+              0
+            </span>
+          </Link>
+
+          {/* Cart */}
+          <Link href="/cart" className="relative" aria-label="Cart">
             <ShoppingCart className="w-6 h-6 hover:text-pink-600 transition" />
+            <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+              0
+            </span>
           </Link>
         </div>
       </div>
