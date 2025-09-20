@@ -38,35 +38,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto py-12">
-      <h2 className="text-2xl font-bold mb-6">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-          className="w-full border p-2 rounded"
-        />
-        <button
-          type="submit"
-          className="w-full bg-pink-600 text-white py-2 rounded hover:bg-pink-700"
-        >
-          Login
-        </button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          Welcome Back 
+        </h2>
 
-      {error && <p className="text-red-600 mt-4">{error}</p>}
-      {success && <p className="text-green-600 mt-4">{success}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+          />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-pink-500 focus:outline-none"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 transition duration-300 font-medium"
+          >
+            Login
+          </button>
+        </form>
+
+        {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+        {success && (
+          <p className="text-green-600 mt-4 text-center">{success}</p>
+        )}
+
+        <p className="text-sm text-gray-600 mt-6 text-center">
+          Don’t have an account?{" "}
+          <a href="/auth/register" className="text-pink-600 hover:underline">
+            Sign up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

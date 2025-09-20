@@ -5,447 +5,258 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
+import Link from "next/link";
+import { useCart } from "@/context/CartContext"; // Uncomment when your CartContext is ready
 
-const products = [
-  {
-    id: 1,
-    name: "Elegant Pearl Necklace",
-    price: 1499,
-    image: "/images/product1.jpg",
-  },
-  {
-    id: 2,
-    name: "Classic Gold Earrings",
-    price: 799,
-    image: "/images/product2.jpg",
-  },
-  {
-    id: 3,
-    name: "Silver Charm Bracelet",
-    price: 999,
-    image: "/images/product3.jpg",
-  },
-  {
-    id: 4,
-    name: "Rose Quartz Ring",
-    price: 699,
-    image: "/images/product4.jpg",
-  },
-  {
-    id: 5,
-    name: "Layered Chain Necklace",
-    price: 1299,
-    image: "/images/product5.jpg",
-  },
-  {
-    id: 6,
-    name: "Studded Hoop Earrings",
-    price: 899,
-    image: "/images/product6.jpg",
-  },
-  {
-    id: 7,
-    name: "Minimalist Silver Ring",
-    price: 599,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 8,
-    name: "Charm Pendant Necklace",
-    price: 1099,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 9,
-    name: "Pearl Drop Earrings",
-    price: 749,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 10,
-    name: "Gold-Plated Bracelet",
-    price: 1199,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 11,
-    name: "Elegant Pearl Necklace",
-    price: 1499,
-    image: "/images/product1.jpg",
-  },
-  {
-    id: 12,
-    name: "Classic Gold Earrings",
-    price: 799,
-    image: "/images/product2.jpg",
-  },
-  {
-    id: 13,
-    name: "Silver Charm Bracelet",
-    price: 999,
-    image: "/images/product3.jpg",
-  },
-  {
-    id: 14,
-    name: "Rose Quartz Ring",
-    price: 699,
-    image: "/images/product4.jpg",
-  },
-  {
-    id: 15,
-    name: "Layered Chain Necklace",
-    price: 1299,
-    image: "/images/product5.jpg",
-  },
-  {
-    id: 16,
-    name: "Studded Hoop Earrings",
-    price: 899,
-    image: "/images/product6.jpg",
-  },
-  {
-    id: 17,
-    name: "Minimalist Silver Ring",
-    price: 599,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 18,
-    name: "Charm Pendant Necklace",
-    price: 1099,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 19,
-    name: "Pearl Drop Earrings",
-    price: 749,
-    image: "/images/product7.jpg",
-  },
-  {
-    id: 20,
-    name: "Gold-Plated Bracelet",
-    price: 1199,
-    image: "/images/product7.jpg",
-  },
-  // …add as many as you want
+// --- MOCK DATA (Keep data separate from components) ---
+const slidesData = [
+  { id: 1, image: "/images/banner1.jpg", title: "Handmade Jewelry", subtitle: "Discover our unique collection", cta: "Shop Now" },
+  { id: 2, image: "/images/banner1.jpg", title: "Festive Offers", subtitle: "Special discounts this season", cta: "Explore" },
+  { id: 3, image: "/images/banner1.jpg", title: "Luxury & Style", subtitle: "Be elegant, be you", cta: "Browse" },
 ];
+
+const genderCategories = [
+  { href: "/shop", imageSrc: "/images/for-female.jpg", title: "For Her", buttonColor: "bg-pink-600 group-hover:bg-pink-700" },
+  { href: "/shop", imageSrc: "/images/for-female.jpg", title: "For Him", buttonColor: "bg-blue-600 group-hover:bg-blue-700" },
+];
+
+const statusCategories = [
+    { href: "/shop", imageSrc: "/images/image.jpg", title: "Single", buttonColor: "bg-pink-600 group-hover:bg-pink-700" },
+    { href: "/shop", imageSrc: "/images/image.jpg", title: "Loved Ones", buttonColor: "bg-green-600 group-hover:bg-green-700" },
+    { href: "/shop", imageSrc: "/images/image.jpg", title: "Couple", buttonColor: "bg-blue-600 group-hover:bg-blue-700" },
+];
+
+const shopByCategoryItems = [
+    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Rings" },
+    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Earrings" },
+    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Bracelets" },
+    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Necklaces" },
+];
+
+const bestSellerProducts = [
+  { id: 1, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
+  { id: 2, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
+  { id: 3, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
+  { id: 4, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
+  { id: 5, name: "Traditional Necklace", price: 1800, image: "/images/product5.jpg" },
+  { id: 6, name: "Modern Necklace", price: 1600, image: "/images/product6.jpg" },
+  { id: 7, name: "Party Necklace", price: 2000, image: "/images/product7.jpg" },
+  { id: 8, name: "Casual Necklace", price: 1400, image: "/images/product7.jpg" },
+  { id: 9, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
+  { id: 10, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
+  { id: 11, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
+  { id: 12, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
+  { id: 13, name: "Traditional Necklace", price: 1800, image: "/images/product5.jpg" },
+  { id: 14, name: "Modern Necklace", price: 1600, image: "/images/product6.jpg" },
+  { id: 15, name: "Party Necklace", price: 2000, image: "/images/product7.jpg" },
+  { id: 16, name: "Casual Necklace", price: 1400, image: "/images/product7.jpg" },
+  { id: 17, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
+  { id: 18, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
+  { id: 19, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
+  { id: 20, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
+];
+
+const newArrivalCategories = [
+  { name: "Mangalsutra", image: "/images/product3.jpg" },
+  { name: "Pendants", image: "/images/product4.jpg" },
+];
+
+// Helper function to chunk arrays for the slider
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  for (let i = 0; i < arr.length; i += size) {
+    out.push(arr.slice(i, i + size));
+  }
   return out;
 }
-export default  function HomePage() {// chunk into groups of 8 for slides
-  const slides =   [
-    {
-      id: 1,
-      image: "/images/banner1.jpg",
-      title: "Handmade Jewelry",
-      subtitle: "Discover our unique collection",
-      cta: "Shop Now",
-    },
-    {
-      id: 2,
-      image: "/images/banner1.jpg",
-      title: "Festive Offers",
-      subtitle: "Special discounts this season",
-      cta: "Explore",
-    },
-    {
-      id: 3,
-      image: "/images/banner1.jpg",
-      title: "Luxury & Style",
-      subtitle: "Be elegant, be you",
-      cta: "Browse",
-    },
-  ];
-  
-  return (
-    <div className="flex flex-col space-y-16 py-16">
 
-      {/* Hero Carousel */}
-      <div className="relative w-full h-[600px]">
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          slidesPerView={1}
-          loop
-          autoplay={{ delay: 4000 }}
-          navigation
-          pagination={{ clickable: true }}
-          className="h-full"
-        >
-          {slides.map((slide) => (
+// --- HELPER COMPONENTS (Defined in the same file for simplicity) ---
+
+// A generic, reusable card component for category links
+type CategoryCardProps = {
+  href: string;
+  imageSrc: string;
+  title: string;
+  buttonColor?: string; // optional
+  aspectRatio?: string; // optional, default to "aspect-[4/5]"
+};
+const CategoryCard = ({ href, imageSrc, title, buttonColor, aspectRatio = "aspect-[4/5]" }:CategoryCardProps) => (
+  <Link href={href} className="group block text-center">
+    <div className={`relative overflow-hidden rounded-lg shadow-lg ${aspectRatio}`}>
+      <Image src={imageSrc} alt={title} fill className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" sizes="(max-width: 768px) 100vw, 50vw" />
+    </div>
+    <div className="mt-4">
+      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <span className={`inline-block px-6 py-2 rounded-full text-white transition-colors duration-300 ${buttonColor}`}>Shop Now</span>
+    </div>
+  </Link>
+);
+
+// A card for the "Shop by Category" section (image and title only)
+type SimpleCategoryCardProps = {
+    href: string;
+    imageSrc: string;
+    title: string;
+};
+const SimpleCategoryCard = ({ href, imageSrc, title }: SimpleCategoryCardProps) => (
+    <Link href={href} className="group block text-center">
+        <div className="relative overflow-hidden rounded-lg shadow-lg aspect-square">
+            <Image src={imageSrc} alt={title} fill className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" sizes="(max-width: 640px) 50vw, 25vw" />
+        </div>
+        <h3 className="mt-4 text-xl font-semibold">{title}</h3>
+    </Link>
+);
+
+
+// --- MAIN PAGE COMPONENT ---
+export default function HomePage() {
+  const { addToCart } = useCart(); // Mock function for now
+
+  return (
+    // Use a main tag for the primary content of the page
+    <main className="flex flex-col py-15">
+
+      {/* Section 1: Hero Carousel */}
+      <section className="relative w-full h-[400px] sm:h-[500px] lg:h-[650px]">
+        <Swiper modules={[Navigation, Pagination, Autoplay]} slidesPerView={1} loop autoplay={{ delay: 4000, disableOnInteraction: false }} navigation pagination={{ clickable: true }} className="h-full">
+          {slidesData.map((slide) => (
             <SwiperSlide key={slide.id}>
               <div className="relative w-full h-full">
-                <Image src={slide.image} alt={slide.title} fill className="object-cover" priority />
-                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center px-4">
-                  <h2 className="text-3xl md:text-5xl font-bold">{slide.title}</h2>
-                  <p className="mt-2 text-lg md:text-2xl">{slide.subtitle}</p>
-                  <button className="mt-4 bg-pink-600 px-6 py-2 rounded-full hover:bg-pink-700 transition">{slide.cta}</button>
+                <Image src={slide.image} alt={slide.title} fill className="object-cover" priority={slide.id === 1} sizes="100vw" />
+                <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center p-4">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">{slide.title}</h2>
+                  <p className="mt-2 text-md sm:text-lg md:text-2xl max-w-2xl">{slide.subtitle}</p>
+                  <button className="mt-6 bg-pink-600 px-6 py-2.5 rounded-full hover:bg-pink-700 transition text-sm sm:text-base font-semibold">{slide.cta}</button>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </section>
 
-      {/* Define Who You Are */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-15">Define Who You Are</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          {/* Female Card */}
-          <div>
-            <div className="relative group w-[500px] h-[550px] overflow-hidden  shadow-lg">
-              <Image src="/images/for-female.jpg" alt="For Her" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">For Her</h3>
-              <button className="bg-pink-600 px-6 py-2 rounded-full text-white hover:bg-pink-700 transition">Shop Now</button>
-            </div>
-          </div>
-          {/* Male Card */}
-          <div>
-            <div className="relative group w-[500px] h-[550px] overflow-hidden  shadow-lg">
-              <Image src="/images/for-female.jpg" alt="For Him" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">For Him</h3>
-              <button className="bg-blue-600 px-6 py-2 rounded-full text-white hover:bg-blue-700 transition">Shop Now</button>
-            </div>
-          </div>
+      {/* Section 2: Define Who You Are (For Her/Him) */}
+      <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Define Who You Are</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          {genderCategories.map((cat) => (
+            <CategoryCard key={cat.title} {...cat} />
+          ))}
         </div>
       </section>
 
-      {/* Promo Banner */}
-      <section className="relative w-full h-[700px] bg-cover bg-center" style={{ backgroundImage: "url('/images/banner1.jpg')" }}>
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative h-full flex items-center justify-start px-12">
-          <div className="text-white max-w-lg">
-            <h2 className="text-4xl font-bold mb-4">Best Offers</h2>
+      {/* Section 3: Promo Banner */}
+      <section className="relative w-full h-[500px] sm:h-[450px] bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/images/banner1.jpg')" }}>
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative h-full flex items-center justify-center text-center md:justify-start md:text-left max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-white max-w-md">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Best Offers</h2>
             <p className="mb-6 text-lg">Flat 50% off on selected jewelry</p>
-            <button className="bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-gray-200 transition">Shop Now</button>
-          </div>
-        </div>
-      </section>
-
-      {/* Status Categories */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-15">Status Categories</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-11">
-          {/* Single Card */}
-          <div>
-            <div className="relative group w-[350px] h-[450px] overflow-hidden shadow-lg">
-              <Image src="/images/for-female.jpg" alt="Single" fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">Single</h3>
-              <button className="bg-pink-600 px-6 py-2 rounded-full text-white hover:bg-pink-700 transition">Shop Now</button>
-            </div>
-          </div>
-          {/* Loved Ones Card */}
-          <div>
-            <div className="relative group w-[350px] h-[450px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="Loved Ones"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">Loved Ones</h3>
-              <button className="bg-green-600 px-6 py-2 rounded-full text-white hover:bg-green-700 transition">
-                Shop Now
-              </button>
-            </div>
-          </div>
-
-          {/* Couple Card */}
-          <div>
-            <div className="relative group w-[350px] h-[450px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="Couple"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">Couple</h3>
-              <button className="bg-blue-600 px-6 py-2 rounded-full text-white hover:bg-blue-700 transition">
-                Shop Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Festival Banner */}
-      <section className="relative w-full h-[600px]">
-        <Image
-          src="/images/banner1.jpg" 
-          alt="Festive Banner"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative h-full flex items-center justify-start px-12">
-          <div className="text-white max-w-lg">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Festive Offers</h2>
-            <p className="mb-6 text-lg md:text-2xl">
-              Special discounts this season
-            </p>
-            <button className="bg-pink-600 px-6 py-3 rounded-full hover:bg-pink-700 transition">
-              Shop Now
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Shop by Category */}
-      <section className="max-w-7xl mx-auto px-6 py-4">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-1">Define Who You Are</h2>
-        <p className="text-gray-600 text-center py-7">Shop by category</p>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-          {/* ringCard */}
-          <div>
-            <div className="relative group w-[250px] h-[250px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="For Her"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-150"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">ring</h3>
-
-            </div>
-          </div>
-          {/*earringCard */}
-          <div>
-            <div className="relative group w-[250px] h-[250px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="For Him"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-150"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">earring</h3>
-
-            </div>
-          </div>
-          {/*braceletCard */}
-          <div>
-            <div className="relative group w-[250px] h-[250px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="For Him"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-150"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">bracelet</h3>
-
-            </div>
-          </div>
-          {/*necklaceCard */}
-          <div>
-            <div className="relative group w-[250px] h-[250px] overflow-hidden shadow-lg">
-              <Image
-                src="/images/for-female.jpg"
-                alt="For Him"
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-150"
-              />
-            </div>
-            <div className="mt-4 text-center">
-              <h3 className="text-xl font-semibold mb-2">necklace</h3>
-
-            </div>
+            <button className="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition">Shop Now</button>
           </div>
         </div>
       </section>
       
-      {/* Best Sellers */}
-       <section className="max-w-7xl mx-auto px-12 py-9">
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-        Best Sellers
-      </h2>
-
-      <Swiper
-        modules={[Navigation]}
-        navigation
-        slidesPerView={1}
-        spaceBetween={24}
-        className="!py-4"
-      >
-        {chunk(products, 4).map((group, idx) => (
-          <SwiperSlide key={idx}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {group.map((p) => (
-                <div
-                  key={p.id}
-                  className="group relative overflow-hidden shadow hover:shadow-lg transition"
-                >
-                  <div className="relative w-full h-50 md:h-56">
-                    <Image
-                      src={p.image}
-                      alt={p.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-
-                  <div className="p-2 text-center">
-                    <h3 className="text-sm md:text-md font-semibold line-clamp-2">
-                      {p.name}
-                    </h3>
-                    <p className="text-pink-600 font-bold mt-1">₹{p.price}</p>
-                    <button className="mt-3 bg-pink-600 text-white px-4 py-2 rounded-full text-sm hover:bg-pink-700 transition">
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </section>
-      {/* About Section */}
-      <section className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0 md:space-x-12">
-        <div className="text-left">
-          <h2 className="text-2xl font-bold text-pink-700">Jewel&Beads</h2>
-          <p className="text-gray-600">You desire, we provide</p>
-        </div>
-        <div className="flex-1 text-gray-700">
-          <p>
-            Some text like About Us – introduce your brand, craftsmanship, and
-            uniqueness here.
-          </p>
+      {/* Section 4: Status Categories (Single, Loved Ones, Couple) */}
+      <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Gifts for Every Occasion</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {statusCategories.map((cat) => (
+            <CategoryCard key={cat.title} {...cat} />
+          ))}
         </div>
       </section>
 
-      {/* New Arrivals */}
-      <section className="w-full bg-black text-white py-12">
-        <div className="max-w-7xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl font-semibold">New Arrivals</h2>
-          <p className="text-gray-300">Some text here</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-400 h-[250px] flex items-center justify-center">
-              New Photo 1
-            </div>
-            <div className="bg-gray-400 h-[250px] flex items-center justify-center">
-              New Photo 2
-            </div>
+      {/* Section 5: Festival Banner */}
+      <section className="relative w-full h-[400px] sm:h-[500px]">
+        <Image src="/images/banner1.jpg" alt="Festive Banner" fill className="object-cover" sizes="100vw" />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative h-full flex items-center justify-center text-center md:justify-start md:text-left max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-white max-w-md">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Festive Offers</h2>
+            <p className="mb-6 text-lg md:text-xl">Special discounts this season</p>
+            <button className="bg-pink-600 px-8 py-3 rounded-full hover:bg-pink-700 transition">Shop Now</button>
           </div>
         </div>
       </section>
-    </div>
+
+      {/* Section 6: Shop by Category */}
+      <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Shop by Category</h2>
+        <p className="text-gray-600 text-center mb-12">Find exactly what you're looking for.</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {shopByCategoryItems.map((item) => (
+                <SimpleCategoryCard key={item.title} {...item} />
+            ))}
+        </div>
+      </section>
+
+      {/* Section 7: Best Sellers */}
+      <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Best Sellers</h2>
+        <Swiper modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }} slidesPerView={1} spaceBetween={24} className="!py-4">
+          {chunk(bestSellerProducts, 4).map((group, idx) => (
+            <SwiperSlide key={idx}>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                {group.map((p) => (
+                  <div key={p.id} className="group relative overflow-hidden rounded-lg border border-gray-200">
+                    <div className="relative w-full aspect-square">
+                      <Image src={p.image} alt={p.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 50vw, 25vw" />
+                    </div>
+                    <div className="p-3 text-center">
+                      <h3 className="text-sm sm:text-base font-semibold line-clamp-2 h-10 sm:h-12">{p.name}</h3>
+                      <p className="text-pink-600 font-bold mt-1">₹{p.price}</p>
+                      <button onClick={() => addToCart({ ...p, quantity: 1 })} className="mt-3 bg-pink-600 text-white w-full px-3 py-2 rounded-full text-xs sm:text-sm hover:bg-pink-700 transition">
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </section>
+
+      {/* Section 8: About Section */}
+      <section className="bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="text-center md:text-left flex-shrink-0">
+                <h2 className="text-3xl font-bold text-pink-700">Jewel&Beads</h2>
+                <p className="text-gray-600 text-lg">You desire, we provide</p>
+            </div>
+            <div className="flex-1 text-gray-700 text-lg text-center md:text-left border-t-2 md:border-t-0 md:border-l-2 border-pink-200 pt-8 md:pt-0 md:pl-12">
+                <p>Introduce your brand, craftsmanship, and uniqueness here. We believe in creating timeless pieces that tell a story and become a cherished part of yours.</p>
+            </div>
+        </div>
+      </section>
+
+      {/* Section 9: New Arrivals */}
+      <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center bg-pink-50/50 p-6 sm:p-10 rounded-2xl">
+              <div className="text-center lg:text-left">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">New Arrivals</h2>
+                  <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-gray-700 text-sm font-medium mb-4 shadow-sm">
+                      <span>💎</span> 500+ New Items
+                  </div>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                      New Arrivals Dropping Daily, Monday through Friday. <br className="hidden sm:block" />
+                      Explore the Latest Launches Now!
+                  </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {newArrivalCategories.map((cat) => (
+                      <div key={cat.name} className="relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                          <div className="relative w-full h-64">
+                            <Image src={cat.image} alt={cat.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                          <h3 className="absolute bottom-4 left-4 text-white font-semibold text-lg drop-shadow-md">{cat.name}</h3>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </section>
+
+    </main>
   );
 }
