@@ -7,6 +7,8 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext"; // Uncomment when your CartContext is ready
+import { products } from "@/data/products"; // adjust the path if needed
+
 
 // --- MOCK DATA (Keep data separate from components) ---
 const slidesData = [
@@ -21,40 +23,20 @@ const genderCategories = [
 ];
 
 const statusCategories = [
-    { href: "/shop", imageSrc: "/images/image.jpg", title: "Single", buttonColor: "bg-pink-600 group-hover:bg-pink-700" },
-    { href: "/shop", imageSrc: "/images/image.jpg", title: "Loved Ones", buttonColor: "bg-green-600 group-hover:bg-green-700" },
-    { href: "/shop", imageSrc: "/images/image.jpg", title: "Couple", buttonColor: "bg-blue-600 group-hover:bg-blue-700" },
+  { href: "/shop", imageSrc: "/images/image.jpg", title: "Single", buttonColor: "bg-pink-600 group-hover:bg-pink-700" },
+  { href: "/shop", imageSrc: "/images/image.jpg", title: "Loved Ones", buttonColor: "bg-green-600 group-hover:bg-green-700" },
+  { href: "/shop", imageSrc: "/images/image.jpg", title: "Couple", buttonColor: "bg-blue-600 group-hover:bg-blue-700" },
 ];
 
 const shopByCategoryItems = [
-    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Rings" },
-    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Earrings" },
-    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Bracelets" },
-    { href: "/shop", imageSrc: "/images/product1.jpg", title: "Necklaces" },
+  { href: "/shop", imageSrc: "/images/product1.jpg", title: "Rings" },
+  { href: "/shop", imageSrc: "/images/product1.jpg", title: "Earrings" },
+  { href: "/shop", imageSrc: "/images/product1.jpg", title: "Bracelets" },
+  { href: "/shop", imageSrc: "/images/product1.jpg", title: "Necklaces" },
 ];
 
-const bestSellerProducts = [
-  { id: 1, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
-  { id: 2, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
-  { id: 3, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
-  { id: 4, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
-  { id: 5, name: "Traditional Necklace", price: 1800, image: "/images/product5.jpg" },
-  { id: 6, name: "Modern Necklace", price: 1600, image: "/images/product6.jpg" },
-  { id: 7, name: "Party Necklace", price: 2000, image: "/images/product7.jpg" },
-  { id: 8, name: "Casual Necklace", price: 1400, image: "/images/product7.jpg" },
-  { id: 9, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
-  { id: 10, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
-  { id: 11, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
-  { id: 12, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
-  { id: 13, name: "Traditional Necklace", price: 1800, image: "/images/product5.jpg" },
-  { id: 14, name: "Modern Necklace", price: 1600, image: "/images/product6.jpg" },
-  { id: 15, name: "Party Necklace", price: 2000, image: "/images/product7.jpg" },
-  { id: 16, name: "Casual Necklace", price: 1400, image: "/images/product7.jpg" },
-  { id: 17, name: "Gold Necklace", price: 1500, image: "/images/product1.jpg" },
-  { id: 18, name: "Silver Ring", price: 800, image: "/images/product2.jpg" },
-  { id: 19, name: "Diamond Earrings", price: 2500, image: "/images/product3.jpg" },
-  { id: 20, name: "Pearl Bracelet", price: 1200, image: "/images/product4.jpg" },
-];
+const bestSellerProducts = products // first 8 as example
+
 
 const newArrivalCategories = [
   { name: "Mangalsutra", image: "/images/product3.jpg" },
@@ -80,7 +62,7 @@ type CategoryCardProps = {
   buttonColor?: string; // optional
   aspectRatio?: string; // optional, default to "aspect-[4/5]"
 };
-const CategoryCard = ({ href, imageSrc, title, buttonColor, aspectRatio = "aspect-[4/5]" }:CategoryCardProps) => (
+const CategoryCard = ({ href, imageSrc, title, buttonColor, aspectRatio = "aspect-[4/5]" }: CategoryCardProps) => (
   <Link href={href} className="group block text-center">
     <div className={`relative overflow-hidden rounded-lg shadow-lg ${aspectRatio}`}>
       <Image src={imageSrc} alt={title} fill className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" sizes="(max-width: 768px) 100vw, 50vw" />
@@ -94,17 +76,17 @@ const CategoryCard = ({ href, imageSrc, title, buttonColor, aspectRatio = "aspec
 
 // A card for the "Shop by Category" section (image and title only)
 type SimpleCategoryCardProps = {
-    href: string;
-    imageSrc: string;
-    title: string;
+  href: string;
+  imageSrc: string;
+  title: string;
 };
 const SimpleCategoryCard = ({ href, imageSrc, title }: SimpleCategoryCardProps) => (
-    <Link href={href} className="group block text-center">
-        <div className="relative overflow-hidden rounded-lg shadow-lg aspect-square">
-            <Image src={imageSrc} alt={title} fill className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" sizes="(max-width: 640px) 50vw, 25vw" />
-        </div>
-        <h3 className="mt-4 text-xl font-semibold">{title}</h3>
-    </Link>
+  <Link href={href} className="group block text-center">
+    <div className="relative overflow-hidden rounded-lg shadow-lg aspect-square">
+      <Image src={imageSrc} alt={title} fill className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" sizes="(max-width: 640px) 50vw, 25vw" />
+    </div>
+    <h3 className="mt-4 text-xl font-semibold">{title}</h3>
+  </Link>
 );
 
 
@@ -155,7 +137,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      
+
       {/* Section 4: Status Categories (Single, Loved Ones, Couple) */}
       <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Gifts for Every Occasion</h2>
@@ -184,9 +166,9 @@ export default function HomePage() {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Shop by Category</h2>
         <p className="text-gray-600 text-center mb-12">Find exactly what you're looking for.</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {shopByCategoryItems.map((item) => (
-                <SimpleCategoryCard key={item.title} {...item} />
-            ))}
+          {shopByCategoryItems.map((item) => (
+            <SimpleCategoryCard key={item.title} {...item} />
+          ))}
         </div>
       </section>
 
@@ -194,7 +176,7 @@ export default function HomePage() {
       <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Best Sellers</h2>
         <Swiper modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }} slidesPerView={1} spaceBetween={24} className="!py-4">
-          {chunk(bestSellerProducts, 4).map((group, idx) => (
+          {chunk(products.slice(0, ), 4).map((group, idx) => (
             <SwiperSlide key={idx}>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {group.map((p) => (
@@ -220,41 +202,41 @@ export default function HomePage() {
       {/* Section 8: About Section */}
       <section className="bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="text-center md:text-left flex-shrink-0">
-                <h2 className="text-3xl font-bold text-pink-700">Jewel&Beads</h2>
-                <p className="text-gray-600 text-lg">You desire, we provide</p>
-            </div>
-            <div className="flex-1 text-gray-700 text-lg text-center md:text-left border-t-2 md:border-t-0 md:border-l-2 border-pink-200 pt-8 md:pt-0 md:pl-12">
-                <p>Introduce your brand, craftsmanship, and uniqueness here. We believe in creating timeless pieces that tell a story and become a cherished part of yours.</p>
-            </div>
+          <div className="text-center md:text-left flex-shrink-0">
+            <h2 className="text-3xl font-bold text-pink-700">Jewel&Beads</h2>
+            <p className="text-gray-600 text-lg">You desire, we provide</p>
+          </div>
+          <div className="flex-1 text-gray-700 text-lg text-center md:text-left border-t-2 md:border-t-0 md:border-l-2 border-pink-200 pt-8 md:pt-0 md:pl-12">
+            <p>Introduce your brand, craftsmanship, and uniqueness here. We believe in creating timeless pieces that tell a story and become a cherished part of yours.</p>
+          </div>
         </div>
       </section>
 
       {/* Section 9: New Arrivals */}
       <section className="max-w-7xl w-full mx-auto px-4 sm:px-6 py-16 sm:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center bg-pink-50/50 p-6 sm:p-10 rounded-2xl">
-              <div className="text-center lg:text-left">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4">New Arrivals</h2>
-                  <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-gray-700 text-sm font-medium mb-4 shadow-sm">
-                      <span>💎</span> 500+ New Items
-                  </div>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                      New Arrivals Dropping Daily, Monday through Friday. <br className="hidden sm:block" />
-                      Explore the Latest Launches Now!
-                  </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {newArrivalCategories.map((cat) => (
-                      <div key={cat.name} className="relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
-                          <div className="relative w-full h-64">
-                            <Image src={cat.image} alt={cat.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                          <h3 className="absolute bottom-4 left-4 text-white font-semibold text-lg drop-shadow-md">{cat.name}</h3>
-                      </div>
-                  ))}
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center bg-pink-50/50 p-6 sm:p-10 rounded-2xl">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">New Arrivals</h2>
+            <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full text-gray-700 text-sm font-medium mb-4 shadow-sm">
+              <span>💎</span> 500+ New Items
+            </div>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              New Arrivals Dropping Daily, Monday through Friday. <br className="hidden sm:block" />
+              Explore the Latest Launches Now!
+            </p>
           </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {newArrivalCategories.map((cat) => (
+              <div key={cat.name} className="relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer">
+                <div className="relative w-full h-64">
+                  <Image src={cat.image} alt={cat.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <h3 className="absolute bottom-4 left-4 text-white font-semibold text-lg drop-shadow-md">{cat.name}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
     </main>

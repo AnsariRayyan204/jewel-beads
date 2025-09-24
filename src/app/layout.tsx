@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { WishlistProvider } from "@/context/WishlistContext"; // ✅ import
+import { OrdersProvider } from "@/context/OrdersContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +21,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>   {/* ✅ wrap WishlistProvider */}
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
+              <OrdersProvider>
+                <Navbar />
+                <main>{children}</main>
+                <Footer />
+              </OrdersProvider>
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>

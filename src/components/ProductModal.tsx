@@ -1,68 +1,111 @@
 "use client";
-
-import { Dialog } from "@headlessui/react";
+import { X, Star } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  description?: string;
-};
-
-export default function ProductModal({
-  product,
-  isOpen,
-  onClose,
-}: {
-  product: Product | null;
+interface ProductModalProps {
+  product: any;
   isOpen: boolean;
   onClose: () => void;
-}) {
-  const { addToCart } = useCart();
+}
 
-  if (!product) return null;
+export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
+  const { addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
+  const [selectedImage, setSelectedImage] = useState(product?.image);
+  const [quantity, setQuantity] = useState(1);
+
+  if (!isOpen || !product) return null;
+
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity });
+    onClose();
+  };
 
   return (
-    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-5xl p-6 relative flex flex-col md:flex-row gap-6">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-800"
+        >
+          <X className="w-6 h-6" />
+        </button>
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-56 object-cover rounded-lg mb-4"
-          />
-          <Dialog.Title className="text-xl font-bold mb-2">
-            {product.name}
-          </Dialog.Title>
-          <p className="text-gray-600 mb-2">₹{product.price}</p>
-          <p className="text-sm text-gray-500 mb-4">
-            {product.description ?? "No description available."}
-          </p>
+        {/* Left Section - Image */}
+        <div className="w-full md:w-1/2">
+          <div className="relative h-96 rounded-lg overflow-hidden">
+            <Image src={selectedImage} alt={product.name} fill className="object-cover" />
+          </div>
+        </div>
 
-          {/* ✅ Add to Cart Button */}
-          <button
-            onClick={() => {
-              addToCart({ ...product, quantity: 1 });
-              onClose();
-            }}
-            className="w-full py-2 mb-3 rounded-lg bg-pink-600 text-white hover:bg-pink-700 transition"
-          >
-            Add to Cart
-          </button>
+        {/* Right Section - Product Details */}
+        <div className="flex-1 flex flex-col">
+          <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
 
-          <button
-            onClick={onClose}
-            className="w-full py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition"
-          >
-            Close
-          </button>
-        </Dialog.Panel>
+          {/* Price */}
+          <div className="mb-2">
+            <span className="text-2xl font-bold text-pink-600">₹{product.price}</span>
+            {product.oldPrice && (
+              <span className="ml-2 text-gray-500 line-through">₹{product.oldPrice}</span>
+            )}
+          </div>
+
+          {/* Reviews */}
+          <div className="flex items-center gap-1 mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-5 h-5 ${
+                  i < Math.round(product.rating || 0) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                }`}
+              />
+            ))}
+            <span className="text-sm text-gray-600">({product.reviews || 0} reviews)</span>
+          </div>
+
+          {/* Quantity Selector */}
+          <div className="flex items-center gap-2 mb-4">
+            <button
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              className="px-3 py-1 border rounded-lg"
+            >
+              -
+            </button>
+            <span className="px-3">{quantity}</span>
+            <button
+              onClick={() => setQuantity((q) => q + 1)}
+              className="px-3 py-1 border rounded-lg"
+            >
+              +
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-3 mt-auto">
+            <button
+              onClick={handleAddToCart}
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg"
+            >
+              Add to Cart
+            </button>
+            <button
+              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg"
+            >
+              Buy It Now
+            </button>
+            <button
+              onClick={() => addToWishlist(product)}
+              className="w-full bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-lg"
+            >
+              Add to Wishlist
+            </button>
+          </div>
+        </div>
       </div>
-    </Dialog>
+    </div>
   );
 }

@@ -22,6 +22,9 @@ export default function Footer() {
               <a href="/" className="hover:text-pink-800 transition-colors">Home</a>
             </li>
             <li>
+              <a href="/about" className="hover:text-pink-800 transition-colors">About</a>
+            </li>
+            <li>
               <a href="/shop" className="hover:text-pink-800 transition-colors">Shop</a>
             </li>
             <li>

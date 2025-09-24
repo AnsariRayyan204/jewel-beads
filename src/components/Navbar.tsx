@@ -2,8 +2,9 @@
 import { ShoppingCart, User, Search, Heart } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import WishlistDrawer from "@/components/WishlistDrawer";
+import WishlistPopup from "@/components/WishlistPopup";
 import { useWishlist } from "@/context/WishlistContext";
+import CartPage from "@/app/cart/page";
 
 export default function Navbar() {
   const [openWishlist, setOpenWishlist] = useState(false);
@@ -37,24 +38,21 @@ export default function Navbar() {
           >
             <Heart className="w-5 sm:w-6 h-5 sm:h-6" />
             {wishlist.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
+              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full px-1.5">
                 {wishlist.length}
               </span>
             )}
           </button>
 
-          {/* Drawer
-          <WishlistDrawer
-            isOpen={openWishlist}
-            onClose={() => setOpenWishlist(false)}
-          /> */}
+          <WishlistPopup isOpen={openWishlist} onClose={() => setOpenWishlist(false)} />
+
 
           {/* Cart */}
           <Link href="/cart" className="relative" aria-label="Cart">
-            <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6 hover:text-pink-600 transition" />
-            <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
-              0
-            </span>
+            <ShoppingCart className="w-5 sm:w-6 h-5 sm:h-6" />
+            <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full px-1.5">
+                {CartPage.length}
+              </span>
           </Link>
         </div>
       </div>
