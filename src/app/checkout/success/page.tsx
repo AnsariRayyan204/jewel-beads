@@ -1,85 +1,59 @@
-// /app/checkout/success/page.tsx
 "use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { CheckCircle } from "lucide-react";
+import { useOrder, OrderItem } from "@/context/OrdersContext";
 
 export default function SuccessPage() {
-  const [order, setOrder] = useState<any>(null);
-
-  useEffect(() => {
-    // Load the most recent order from localStorage
-    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-    if (orders.length > 0) {
-      setOrder(orders[0]); // latest order is saved at index 0
-    }
-  }, []);
-
-  if (!order) {
-    return (
-      <div className="max-w-3xl mx-auto p-6 text-center">
-        <h1 className="text-2xl font-bold">No recent order found</h1>
-        <Link href="/shop" className="text-pink-500 hover:underline">
-          Go back to Shop
-        </Link>
-      </div>
-    );
-  }
+  const { orders } = useOrder();
+  const latestOrder = orders[0]; // get the most recent order
 
   return (
-    <div className="max-w-3xl mx-auto p-6 text-center">
-      <h1 className="text-3xl font-bold text-green-600 mb-4">
-        ✅ Order Placed Successfully!
-      </h1>
+    <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
+      <CheckCircle className="w-16 h-16 text-green-600 mb-4" />
+      <h1 className="text-2xl font-bold mb-2">Order Placed Successfully!</h1>
       <p className="text-gray-600 mb-6">
-        Thank you for your purchase. Your order has been placed and is being
-        processed.
+        Thank you for your purchase. Your order has been confirmed.
       </p>
 
-      {/* Order Details */}
-      <div className="border rounded-lg p-4 text-left shadow-md bg-white">
-        <h2 className="text-xl font-semibold mb-2">Order Summary</h2>
-        <p className="mb-2">Order ID: <span className="font-mono">{order.id}</span></p>
-        <p className="mb-2">Date: {new Date(order.date).toLocaleString()}</p>
-        <p className="mb-2">Payment Method: {order.payment}</p>
+      {/* Show latest order summary */}
+      {latestOrder && (
+        <div className="bg-white shadow rounded-2xl p-6 w-full max-w-md text-left mb-6">
+          <p className="font-medium mb-2">Order ID: {latestOrder.id}</p>
+          <p className="text-sm text-gray-500 mb-4">
+            Placed on {latestOrder.date}
+          </p>
 
-        <h3 className="text-lg font-semibold mt-4">Shipping Info</h3>
-        <p>{order.contact.name}</p>
-        <p>{order.contact.email}</p>
-        <p>{order.contact.phone}</p>
-        <p>
-          {order.shipping.address}, {order.shipping.city}, {order.shipping.state}{" "}
-          {order.shipping.postalCode}, {order.shipping.country}
-        </p>
+          <div className="divide-y">
+            {latestOrder.items.map((item: OrderItem) => (
+              <div key={item.id} className="flex justify-between py-2">
+                <span>
+                  {item.name} × {item.quantity}
+                </span>
+                <span>₹{item.price * item.quantity}</span>
+              </div>
+            ))}
+          </div>
 
-        <h3 className="text-lg font-semibold mt-4">Items</h3>
-        <ul className="list-disc list-inside">
-          {order.items.map((item: any) => (
-            <li key={item.id}>
-              {item.name} x {item.quantity} — ₹{item.price * item.quantity}
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex justify-between mt-4 font-bold">
-          <span>Total</span>
-          <span>₹{order.total}</span>
+          <div className="flex justify-between font-semibold mt-4">
+            <span>Total</span>
+            <span>₹{latestOrder.total}</span>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Navigation */}
-      <div className="mt-6 flex justify-center gap-4">
-        <Link
-          href="/orders"
-          className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600"
-        >
-          View Orders
-        </Link>
+      {/* Action buttons */}
+      <div className="flex gap-4">
         <Link
           href="/shop"
-          className="border border-gray-400 px-4 py-2 rounded hover:bg-gray-100"
+          className="px-6 py-3 rounded-full bg-gray-200 hover:bg-gray-300 transition"
         >
           Continue Shopping
+        </Link>
+        <Link
+          href="/orders"
+          className="px-6 py-3 rounded-full bg-pink-600 text-white hover:bg-pink-700 transition"
+        >
+          View My Orders
         </Link>
       </div>
     </div>

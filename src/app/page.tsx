@@ -96,7 +96,7 @@ export default function HomePage() {
 
   return (
     // Use a main tag for the primary content of the page
-    <main className="flex flex-col py-15">
+    <main className="flex flex-col py-18">
 
       {/* Section 1: Hero Carousel */}
       <section className="relative w-full h-[400px] sm:h-[500px] lg:h-[650px]">
