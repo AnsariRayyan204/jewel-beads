@@ -52,6 +52,7 @@ export default function CheckoutPage() {
         country: shipping.country,
         phone: shipping.phone,
       },
+      paymentMethod: "Cash on Delivery",
     };
 
     addOrder(newOrder);

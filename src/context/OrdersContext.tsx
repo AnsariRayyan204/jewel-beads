@@ -28,6 +28,7 @@ export interface Order {
   total: number;
   status: "Processing" | "Shipped" | "Delivered";
   shipping: ShippingInfo;
+  paymentMethod: string;
 }
 
 interface OrderContextType {
